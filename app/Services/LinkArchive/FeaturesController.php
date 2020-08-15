@@ -59,7 +59,7 @@ class FeaturesController extends Controller
             return $this->sendError(__('Your node path is unreachable: :path', ['path' => $exec]));
         }
 
-        $dir = base_path('vendors/spatie/browsershot');
+        $dir = base_path('vendor/spatie/browsershot');
 
         if (false === is_dir($dir)) {
             return $this->sendError(__('Puppeteer dependencies not installed, require spatie/browsershot'));

@@ -4,6 +4,8 @@ services:
     image: shaark:${SHAARK_IMAGE_TAG:-php-latest}
     build: .
     restart: unless-stopped
+    volumes:
+      - archives:/app/storage/app/archives
     ports:
       - target: 80
         published: ${SHAARK_PORT:-80}
@@ -57,3 +59,4 @@ services:
 volumes:
   redis: {}
   mariadb: {}
+  archives: {}

@@ -9,7 +9,10 @@ RUN apt-get install -y nodejs gconf-service libasound2 libatk1.0-0 libc6 libcair
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-RUN docker-php-ext-install gmp bcmath pdo mbstring gd exif zip sockets pdo_mysql pgsql pdo_pgsql
+RUN curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/bin/youtube-dl && \
+    chmod a+rx /usr/bin/youtube-dl
+
+RUN docker-php-ext-install gmp bcmath pdo mbstring gd exif zip sockets pdo_mysql pgsql pdo_pgsql sockets iconv
 
 RUN cp .env.example .env
 
