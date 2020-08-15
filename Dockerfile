@@ -1,23 +1,24 @@
-FROM php:7-alpine
+FROM php:7
 MAINTAINER Shaark contributors <https://github.com/MarceauKa/shaark>
 
 WORKDIR /app
 COPY . /app
 
-RUN apk add --update --no-cache gmp gmp-dev \
-    && docker-php-ext-install gmp bcmath
+RUN apt-get update
+RUN apt-get install -y nodejs gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget libgmp-dev openssl zip unzip libonig-dev zlib1g-dev libpng-dev libzip-dev postgresql-server-dev-all
 
-RUN apk add --no-cache --update bash openssl zip unzip oniguruma-dev zlib-dev libpng-dev libzip-dev postgresql-dev && \
-        cp .env.example .env && \
-        curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
-        docker-php-ext-install pdo mbstring gd exif zip sockets pdo_mysql pgsql pdo_pgsql && \
-        \
-        composer install --no-dev -o && \
-        php artisan optimize && \
-        php artisan view:clear && \
-        \
-        php artisan key:generate && \
-        php artisan storage:link
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+RUN docker-php-ext-install gmp bcmath pdo mbstring gd exif zip sockets pdo_mysql pgsql pdo_pgsql
+
+RUN cp .env.example .env
+
+RUN composer install --no-dev -o
+
+RUN php artisan optimize && \
+    php artisan view:clear && \
+    php artisan key:generate && \
+    php artisan storage:link
 
 ENV \
   DB_HOST="mariadb" \
